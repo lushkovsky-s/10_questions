@@ -1,68 +1,38 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Code challenge (WEB)
 
-## Available Scripts
+Author: Sergey Lushkovsky  
+Live demo: [demo-10tf.lushkovsky.com](http://demo-10tf.lushkovsky.com)  
 
-In the project directory, you can run:
+## How to run
 
-### `yarn start`
+1. `yarn install` or `npm install`
+1.  One of the options based on that do you need:
+    * `yarn start` or `npm run start` to start the app on [localhost:3000](http://localhost:3000)
+    * `yarn build` or `npm run build` to build the static version of the app (to build/ folder)
+    * `yarn build-with-zip` or `npm run build-with-zip` to build and zip the static version of the app (build/ and build.zip would be created)
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Technical summary
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Framework: React (create-react-app + react-app-rewired)  
+Routing: react-router-dom  
+State management: MobX  
+Netowrking package: axios  
 
-### `yarn test`
+## QA
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+* **Why no semicolons**  
+    As all the code passes through the babel no way missed semicolon will lead to any bad consequences (like bugs after minification)
+* **Why to use dangerouslySetInnerHTML? Is it really dangerous?**  
+    Basically, dangerouslySetInnerHTML is a way to render encoded html inside dom element. It's dangerous because in case of any fraud on the server or between the server and client it could cause negative consequences e.g. some malicious form or ads will be rendered to the user. In practice, as we requesting the server through https (with ssl) - MITM attack is very unlikely. The only weak place is our server.  
+    The best solution would be to not using html encoding at all (remove it on the backend).
+* **What is react-app-rewired and why it has used?**    
+    react-app-rewired is an alternative runner for create-react-app project which allows us to add some extras to the webpack config without the eject.  
+    In our case, we're using it to add decorators support.
+* **Why MobX (not redux)?**  
+    This particular task doesn't require reducers in state management (even in case of scale). As so, MobX is a way cleaner and easier approach.
+* **Why not to use function components?**  
+    Basically, there is no big difference between function- and class-based components. I think that it's more codestyle question and as so, my personal choice is class-based components. 
+* **Why TS haven't used?**  
+    In the scope of this task, I see it as an overhead. But there is no problem to migrate to TS for this project (and me).
+* **How was the live demo done?**     
+    The project has been built using the "build-with-zip" command. The build.zip have been transferred to a Digital Ocean vps (using scp) and then unpacked to its folder. Afterward, cloudflare (dns) and nginx (webserver) have been configured to serve this static folder on the domain requests. 

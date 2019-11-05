@@ -1,0 +1,21 @@
+.question__category {
+    font-weight: bold;
+}
+
+.question__buttons {
+    justify-self: flex-end;
+}
+
+.question__buttons button {
+    margin: 0 10px;
+}
+
+.question__card {
+    text-align: center;
+}
+
+.question__card__question {
+    border: 1px solid black;
+    padding: 50px 30px;
+    margin-bottom: 10px;
+}
